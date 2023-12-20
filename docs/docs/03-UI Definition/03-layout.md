@@ -49,4 +49,5 @@ The `info` element enables us to display general information on the page, such a
 ````yaml
 - type: info
   title: Heading name
+  text: Content of the information block
 ````

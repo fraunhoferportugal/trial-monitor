@@ -11,12 +11,12 @@ The **data access** is done by defining a property `config`. This `config` is pr
 
 ```yaml
 config:
-  apiKey: 'PROJECT_API_KEY'
-  authDomain: 'project-name.firebaseapp.com'
-  databaseURL: 'https://project-name.firebaseio.com'
-  projectId: 'project-name'
-  storageBucket: 'project-name.appspot.com'
-  messagingSenderId: 'XXXXXXXXXXXXX'
+  apiKey: PROJECT_API_KEY
+  authDomain: project-name.firebaseapp.com
+  databaseURL: https://project-name.firebaseio.com
+  projectId: project-name
+  storageBucket: project-name.appspot.com
+  messagingSenderId: XXXXXXXXXXXXX
 ```
 
 ## Authentication
@@ -68,11 +68,11 @@ The Firebase connector can interpret Unix or Firebase native timestamps. Unix ti
   - **type**: (optional) If you are using Firebase native timestamp you need to set the `type` property to `FirebaseTimestamp`.
 
 ````yaml
-timestamp: myTimestampName
+timestampField: myTimestampName
 
 // --- OR ---
 
-timestamp:
+timestampField:
   name: myTimestampName
   type: FirebaseTimestamp
 ````

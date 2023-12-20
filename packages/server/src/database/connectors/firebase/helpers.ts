@@ -30,12 +30,12 @@ export const recursiveMerge = (tableConfig: DatabaseQuery | UsersConfig | Includ
   const { structure } = dbConfig
   const { table, include } = tableConfig
 
-  if (!structure) {
-    throw new Error('The \'structure\' property is required when joining collections')
-  }
-
   if (!include || !includesData) {
     return result
+  }
+
+  if (!structure) {
+    throw new Error('The \'structure\' property is required when joining collections')
   }
 
   include.forEach((inc) => {

@@ -29,7 +29,7 @@ initAuth(app).then(() => {
   databaseAPI.setupDatabases().then(() => {
     http.createServer(app).listen(PORT, () => {
       initializeCache()
-      logger.info('Listening in /' + API_BASE_URL)
+      logger.info(`Listening in ${API_BASE_URL}/api`)
       logger.info(STARTED_LISTENING(PORT))
     })
   }).catch(error => logger.error(error))

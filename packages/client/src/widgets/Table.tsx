@@ -9,10 +9,11 @@ import Flex from '@app/components/Flex'
 import CardHeader from '@app/components/CardHeader'
 import WarningIndicator from '@app/components/WarningIndicator'
 import useWarning from '@app/hooks/useWarning'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 
 export default function Table ({ data, title, warnings, export: allowExport, ...props }: TableWithData) {
   const columns = data.length > 0 ? Object.keys(data[0]) : []
-  const rows = data.map(el => Object.values(el))
+  const rows = parseRowsData(data)
 
   const columnsFormatted = columns.map((column) => {
     const columnWarning = warnings?.[column.split('.').pop() ?? column]
@@ -65,8 +66,10 @@ const TableCell = ({ value, warning }: TCell) => {
 
   return (
     <CellStyled hasWarning={showWarning}>
-      <span>{value}</span>
-      <WarningIndicator warning={warning} value={value} />
+      <TooltipProvider>
+        <CellDataStyles>{value}</CellDataStyles>
+        <WarningIndicator warning={warning} value={value} />
+      </TooltipProvider>
     </CellStyled>
   )
 }
@@ -81,7 +84,7 @@ const Button = styled('a', {
   transition: 'all 300ms',
 
   '&:hover': {
-    backgroundColor: '$primaryTintDark'
+    backgroundColor: '$primaryTintHover'
   }
 })
 
@@ -100,3 +103,22 @@ const CellStyled = styled('div', {
     }
   }
 })
+
+const CellDataStyles = styled('span', {
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  maxWidth: 250
+})
+
+const parseRowsData = (data: any[]) => {
+  return data.map(el => {
+    return Object.values(el).map((val: any) => {
+      if (typeof val === 'boolean') {
+        return val.toString()
+      }
+
+      return val
+    })
+  })
+}

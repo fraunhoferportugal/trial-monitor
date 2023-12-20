@@ -86,7 +86,7 @@ docker-compose -f docker-compose.dev.yaml up
 ```
 
 :::note
-If you're running Trial Monitor in a VM set the `API_URL` with `http://<ip>/api`.
+If you're running Trial Monitor in a VM set the `API_URL` with `http://<ip>/api` and set the Host rule on the services' labels (e.g., `- "traefik.http.routers.frontend.rule=Host(`&lt;ip>`) && PathPrefix(`/`)"`).
 :::
 
 :::caution

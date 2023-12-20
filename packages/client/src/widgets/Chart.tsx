@@ -20,6 +20,7 @@ export default function Chart ({ title, data, spec, ...props }: ChartWithData) {
   }
 
   const cleanedData = data.map(entry => {
+    // TODO Can be refactored, we are not longer using the '.' notation
     return Object.entries(entry).reduce<{ [key: string]: any}>((acc, [k, v]) => {
       const [_, field] = k.split('.')
 

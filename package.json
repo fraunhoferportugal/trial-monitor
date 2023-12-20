@@ -7,7 +7,7 @@
     "postinstall": "yarn --cwd packages/client install && yarn --cwd packages/server install",
     "dev": "concurrently \"yarn client\" \"yarn nodemon\"",
     "nodemon": "nodemon --watch config -e js --exec yarn run server",
-    "client": "yarn --cwd packages/client start",
+    "client": "yarn --cwd packages/client dev",
     "server": "yarn --cwd packages/server dev"
   },
   "devDependencies": {

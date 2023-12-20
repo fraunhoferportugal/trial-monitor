@@ -2,16 +2,17 @@ import axios from 'axios'
 import { endOfToday, format, startOfToday, subDays } from 'date-fns'
 import type { PageResponse, ResponseSiteConfig } from '@types'
 
-const NODE_ENV = `${import.meta.env.NODE_ENV}`
-const API_URL = `${import.meta.env.API_URL}`
+const APP_API_URL = `${import.meta.env.APP_API_URL}`
 
 const getApiUrl = (apiUrl?: string) => {
-  if (NODE_ENV !== 'production') return API_URL
-  return apiUrl || API_URL
+  if (import.meta.env.DEV) return APP_API_URL
+
+  return apiUrl || APP_API_URL
 }
 
 export const getUIConfig = async () => {
-  const response = await axios.get('/ui-config.json')
+  const response = await axios.get(import.meta.env.BASE_URL + 'ui-config.json')
+
   return response.data
 }
 

@@ -18,7 +18,7 @@ export default function Sidebar ({ pages }: Props) {
   return (
     <Wrapper>
       <Logo to="/">
-        <img width={200} src={uiConfig?.theme?.logo ?? '/logo.png'} alt="logo" />
+        <img width={200} src={import.meta.env.BASE_URL + (uiConfig?.theme?.logo ?? 'logo.png')} alt="logo" />
       </Logo>
 
       <StyledList>

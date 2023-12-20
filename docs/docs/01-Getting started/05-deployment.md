@@ -14,6 +14,10 @@ docker-compose up -d
 
 In many cases, you'll want to control who has access to Trial Monitor. Trial Monitor helps you with this by providing support to authentication through [Keycloak](#keycloak) or [Firebase](#firebase).
 
+:::note
+If you're running Trial Monitor in a VM set the `API_URL` with `http://<ip>/api` and set the Host rule on the services' labels (e.g., `- "traefik.http.routers.frontend.rule=Host(`&lt;ip>`) && PathPrefix(`/`)"`).
+:::
+
 ## Keycloak
 
 [Keycloak](https://www.keycloak.org/) can be particularly useful in cases where you have to manage the authentication of users, roles and permissions.
@@ -220,3 +224,34 @@ New users can be created through the Firebase console.
 :::danger
 Be aware that you should not commit the service account configuration to a public repository.
 :::
+
+## Deployment to a subdirectory
+
+By default Trial Monitor expects to be deployed on the domain root; however, it's possible to configure Trial Monitor to be deployed on a subdirectory as well. To achieve this, we need to make the following changes and rebuild the Docker images:
+
+- On the Docker Compose file:
+  - Set the `PUBLIC_URL` variables to the desired path (e.g. `/trial-monitor`);
+  - On the `frontend` service, change the path of the volume that is mounted to include the new path (e.g., `- ./config/ui-config.json:/usr/share/nginx/html/**trial-monitor**/ui-config.json`) and change the PathPrefix in the labels (e.g., `PathPrefix(`/trial-monitor`)`);
+  - On the `api` service, change the PathPrefix in the labels (e.g., `PathPrefix(`/trial-monitor/api`)`);
+  - In case you are deploying with authentication, also set the `KC_HOSTNAME_PATH` and `KC_HTTP_RELATIVE_PATH` with the new path (e.g., /trial-monitor/auth) and change the PathPrefix in the labels (e.g., `PathPrefix(`/trial-monitor/auth`)`);
+- On the `ui-config.json` file:
+  - Change the `api_url` to include the new path (e.g. /trial-monitor/api);
+- Finally, build the docker images and start the services: `docker-compose up --build`.
+
+## HTTPS
+
+To deploy Trial Monitor with HTTPS we have added configuration examples for certificates from [Let's Encrypt](https://letsencrypt.org/). To achieve this follow these instructions:
+
+- On the Docker Compose file:
+  - Remove `traefik.http.routers.api.entrypoints=web` from the `api` and `frontend` services;
+  - Uncomment the following lines in the `api` and `frontend` services:
+    - `traefik.http.routers.api.entrypoints=websecure`
+    - `traefik.http.routers.api.tls.certresolver=myresolver`
+  - Uncomment the following lines in the `traefik` service:
+    - `--entrypoints.websecure.address=:443`
+    - `--certificatesresolvers.myresolver.acme.httpchallenge=true`
+    - `--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web`
+    - `--certificatesresolvers.myresolver.acme.email=<YOUR_EMAIL>` (don't forget to add your email here)
+    - `--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json`
+    - And in the volumes part: `- ./data/letsencrypt:/letsencrypt`
+  - Make sure the Host is correctly defined in `api`, `frontend` and, if it's your case, the `keycloak` services.

@@ -24,28 +24,30 @@ export default function QueryTooltip ({ query, meta }: Props) {
           </g>
         </svg>
       </StyledTrigger>
-      <StyledContent>
-        <StyledInfoRow>
-          <dt>Database: </dt>
-          <StyledTimestampValue>{query.database}</StyledTimestampValue>
-        </StyledInfoRow>
-        <StyledInfoRow>
-          <dt>Doc: </dt>
-          <StyledTimestampValue>{query.table}</StyledTimestampValue>
-        </StyledInfoRow>
-        <StyledInfoRow>
+      <TooltipPrimitive.Portal>
+        <StyledContent>
+          <StyledInfoRow>
+            <dt>Database: </dt>
+            <StyledTimestampValue>{query.database}</StyledTimestampValue>
+          </StyledInfoRow>
+          <StyledInfoRow>
+            <dt>Doc: </dt>
+            <StyledTimestampValue>{query.table}</StyledTimestampValue>
+          </StyledInfoRow>
+          <StyledInfoRow>
 
-          <dt>Fields: </dt>
-          <StyledTimestampValue>{query.fields?.map(f => {
-            return typeof f === 'string' ? f : f.target
-          }).join(', ') ?? '-'}</StyledTimestampValue>
-        </StyledInfoRow>
-        <StyledInfoRow>
-          <dt>Timestamp: </dt>
-          <StyledTimestampValue error={hasError}>{meta?.timestamp || 'No timestamp'}</StyledTimestampValue>
-        </StyledInfoRow>
-        <StyledArrow />
-      </StyledContent>
+            <dt>Fields: </dt>
+            <StyledTimestampValue>{query.fields?.map(f => {
+              return typeof f === 'string' ? f : f.target
+            }).join(', ') ?? '-'}</StyledTimestampValue>
+          </StyledInfoRow>
+          <StyledInfoRow>
+            <dt>Timestamp: </dt>
+            <StyledTimestampValue error={hasError}>{meta?.timestamp || 'No timestamp'}</StyledTimestampValue>
+          </StyledInfoRow>
+          <StyledArrow />
+        </StyledContent>
+      </TooltipPrimitive.Portal>
     </TooltipPrimitive.Root>
   )
 }

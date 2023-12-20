@@ -9,6 +9,7 @@ services:
       - REDIS_HOST=redis_cache
       - REDIS_PORT=6379
       - REDIS_PASSWORD=r3d1sc4ch3
+      # - PUBLIC_URL=/trial-monitor
     restart: unless-stopped
     volumes:
       - ./config:/usr/config
@@ -20,36 +21,53 @@ services:
     depends_on:
       - keycloak
       - redis_cache
+    labels:
+      - traefik.http.routers.api.rule=Host(`localhost`) && PathPrefix(`/api`)
+      - traefik.http.routers.api.entrypoints=web
+      # - traefik.http.routers.api.entrypoints=websecure
+      # - traefik.http.routers.api.tls.certresolver=myresolver
+
   frontend:
     # image: ghcr.io/fraunhoferportugal/trialmonitor-ui:latest
     build:
       context: ./packages/client/
       dockerfile: Dockerfile
+      # args:
+      #   - PUBLIC_URL=/trial-monitor
     restart: unless-stopped
     volumes:
       - ./config/ui-config.json:/usr/share/nginx/html/ui-config.json
     expose:
       - 80
-  nginx_proxy:
-    image: nginx:1.21-alpine
-    environment:
-      - API_PORT=80
-      - FRONTEND_PORT=80
-    command: /bin/sh -c "envsubst '$${API_PORT} $${FRONTEND_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
-    restart: unless-stopped
-    volumes:
-      - ./deployment/nginx.auth.conf:/etc/nginx/conf.d/default.conf.template
-      - ./data/logs/nginx/:/var/log/nginx/
-    links:
-      - api:api
-      - frontend:frontend
-      - keycloak:keycloak
+    labels:
+      - traefik.http.routers.frontend.rule=Host(`localhost`) && PathPrefix(`/`)
+      - traefik.http.routers.frontend.entrypoints=web
+      # - traefik.http.routers.frontend.entrypoints=websecure
+      # - traefik.http.routers.frontend.tls.certresolver=myresolver
+
+  traefik:
+    image: traefik:v2.9
+    command:
+      - --entrypoints.web.address=:80
+      - --providers.docker=true
+      # - --log.level=DEBUG
+      - --log.filePath=/logs/traefik.log
+      # - --entrypoints.websecure.address=:443
+      # - --certificatesresolvers.myresolver.acme.httpchallenge=true
+      # - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      # - --certificatesresolvers.myresolver.acme.email=<YOUR_EMAIL>
+      # - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
     depends_on:
       - keycloak
       - api
       - frontend
-    ports:
-      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/logs/traefik/:/logs/
+      # - ./data/letsencrypt:/letsencrypt
+
   keycloak-db:
     image: postgres:12.2-alpine
     environment:
@@ -84,6 +102,12 @@ services:
     volumes:
       - ./deployment/wait-for-it.sh:/wait-for-it.sh
       - ./data/logs/keycloak/:/opt/keycloak/data/log/
+    labels:
+      - traefik.http.routers.keycloak.rule=Host(`localhost`) && PathPrefix(`/auth`)
+      - traefik.http.routers.keycloak.entrypoints=web
+      # - traefik.http.routers.keycloak.entrypoints=websecure
+      # - traefik.http.routers.keycloak.tls.certresolver=myresolver
+
   redis_cache:
     image: redis:alpine3.15
     command: redis-server --requirepass r3d1sc4ch3

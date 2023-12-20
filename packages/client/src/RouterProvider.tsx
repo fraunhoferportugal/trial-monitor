@@ -10,7 +10,7 @@ import PageContainer from './containers/PageContainer'
 
 const RouterProvider = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<ProtectedRoutes />}>
           <Route element={<DashboardSkeleton />}>

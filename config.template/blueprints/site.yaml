@@ -20,4 +20,4 @@ databases:
           include:
             - table: clinicalConditions
               fields: [Description]
-    timestampField: Date
+    timestampField: Dates

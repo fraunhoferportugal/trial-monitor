@@ -42,7 +42,7 @@ const LoginContainer = () => {
     <Wrapper>
       <div className="login-content">
         <div className="login-logo">
-          <img src="/logo_large.png" width="200" />
+          <img src={`${import.meta.env.BASE_URL}logo_large.png`} width="200" />
         </div>
         {authenticated && isAuthenticating
           ? <div className="spinner">

@@ -22,18 +22,20 @@ export default function WarningIndicator ({ warning, value, size }: Props) {
   return (
     <TooltipPrimitive.Root delayDuration={400}>
       <OperatorStyled size={size} warning={showWarning}>{symbol}</OperatorStyled>
-      <StyledContent avoidCollisions={true} collisionTolerance={10} >
-        <StyledHeader>Alert</StyledHeader>
-        <StyledInfoRow>
-          <dt>Threshold: </dt>
-          <StyledValue>{warning.threshold}</StyledValue>
-        </StyledInfoRow>
-        <StyledInfoRow>
-          <dt>Operator: </dt>
-          <StyledValue>{symbol}</StyledValue>
-        </StyledInfoRow>
-        <StyledArrow />
-      </StyledContent>
+      <TooltipPrimitive.Portal>
+        <StyledContent avoidCollisions={true} collisionPadding={10} >
+          <StyledHeader>Alert</StyledHeader>
+          <StyledInfoRow>
+            <dt>Threshold: </dt>
+            <StyledValue>{warning.threshold}</StyledValue>
+          </StyledInfoRow>
+          <StyledInfoRow>
+            <dt>Operator: </dt>
+            <StyledValue>{symbol}</StyledValue>
+          </StyledInfoRow>
+          <StyledArrow />
+        </StyledContent>
+      </TooltipPrimitive.Portal>
     </TooltipPrimitive.Root>
   )
 }

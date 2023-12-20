@@ -4,7 +4,7 @@
         "provider": null
     },
     "theme": {
-        "logo": "/logo.png",
+        "logo": "logo.png",
         "colors": {
             "neutral10": "#464646",
             "neutral20": "#767676",

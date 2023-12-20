@@ -8,7 +8,8 @@ import Card from '@app/components/Card'
 import ErrorCard from '@app/components/ErrorCard'
 import { getConfig } from '@app/api'
 import { styled } from '@app/theme'
-import IconChevronRight from '@app/assets/ic_chevron_right.svgr.svg'
+import IconChevronRight from '../assets/ic_chevron_right.svgr.svg'
+
 import { useUIConfig } from '@app/config-provider'
 import useParticipants from '@app/hooks/useParticipants'
 
