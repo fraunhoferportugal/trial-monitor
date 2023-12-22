@@ -1,8 +1,16 @@
 # Change Log
 
+## Version 0.4.0 (2023-12-21)
+
+- Added support to deploy from directory
+- Added Traefik config
+- Update libs
+- Update build tools with Vite
+
 ## Version 0.3.0 (2022-09-01)
+
 - Added support for joining multiple tables/docs
-- **Breaking:** Changed `tables`  to `table`. This field now expects a string
+- **Breaking:** Changed `tables` to `table`. This field now expects a string
 - Added 404 error page
 - Added no data placeholder to widgets
 - Improved documentation
@@ -10,7 +18,8 @@
 - Query parameters validation on UI and API
 
 ## Version 0.2.1 (2022-08-05)
-- Changed the configuration of the SQL connector 
+
+- Changed the configuration of the SQL connector
 - Added logging of api calls
 - Improved handling of datetime in SQL
 - Bug fixes
